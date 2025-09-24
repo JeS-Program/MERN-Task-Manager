@@ -1,5 +1,11 @@
 import { createContext, useContext, useState } from "react";
-import { createTaskRequest, getTasksRequest, deleteTaskRequest, getTaskRequest, updateTaskRequest } from "../api/tasks";
+import {
+  createTaskRequest,
+  getTasksRequest,
+  deleteTaskRequest,
+  getTaskRequest,
+  updateTaskRequest,
+} from "../api/tasks";
 
 const TaskContext = createContext();
 
@@ -12,7 +18,6 @@ export const useTasks = () => {
 };
 
 export function TaskProvider({ children }) {
-
   // Aquí va la lógica del contexto
 
   const [tasks, setTasks] = useState([]);
@@ -23,11 +28,8 @@ export function TaskProvider({ children }) {
       setTasks(res.data);
     } catch (error) {
       console.log(error);
-
     }
-
-
-  }
+  };
 
   const createTask = async (task) => {
     try {
@@ -35,26 +37,18 @@ export function TaskProvider({ children }) {
       getTasks(); //Permite actualizar las tareas luego de crear una nueva
     } catch (error) {
       console.log(error);
-
     }
-
-
-  }
+  };
 
   const deleteTask = async (id) => {
     try {
       const res = await deleteTaskRequest(id);
       if (res.status === 204) {
-        setTasks(tasks.filter(task => task._id != id)) //Eso crea un arreglo nuevo sin la tarea que se acaba de eliminar
+        setTasks(tasks.filter((task) => task._id != id)); //Eso crea un arreglo nuevo sin la tarea que se acaba de eliminar
       }
-
     } catch (error) {
       console.log(error);
-
     }
-
-
-
   };
 
   const getTask = async (id) => {
@@ -63,11 +57,8 @@ export function TaskProvider({ children }) {
       return res.data;
     } catch (error) {
       console.log(error);
-
     }
-
-  }
-
+  };
 
   const updateTask = async (id, task) => {
     try {
@@ -75,11 +66,21 @@ export function TaskProvider({ children }) {
       getTasks(); // Actualizar tareas mostradas luego de editar
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
-  return (<TaskContext.Provider value={{
-    tasks, createTask, getTasks, deleteTask, getTask, updateTask //Exporta los valores
-  }}>{children}</TaskContext.Provider>);
+  return (
+    <TaskContext.Provider
+      value={{
+        tasks,
+        createTask,
+        getTasks,
+        deleteTask,
+        getTask,
+        updateTask, //Exporta los valores
+      }}
+    >
+      {children}
+    </TaskContext.Provider>
+  );
 }
